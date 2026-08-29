@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Exit immediately if any command fails
+# Exit immediately if any command fails test
 set -e
 
 # Always find and jump to the Git repository root
