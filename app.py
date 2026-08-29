@@ -113,3 +113,47 @@ def put_data(key):
             })
 
 
+#endpoint to replicate
+@app.route("/replicate", methods=["POST"])
+def replicate():
+    key = request.json.get("key")
+    value = request.json.get("value")
+    store[key] = value 
+    return jsonify({
+        "status": "ok",
+        "node": NODE_NAME
+    })
+
+#endpoint to get current mode
+@app.route("/mode", methods=["GET"])
+def get_mode():
+    return jsonify({
+        "node": NODE_NAME,
+        "mode": MODE
+    })
+
+#endpoint to switch modes
+@app.route("/mode", methods=["POST"])
+def set_mode():
+    global MODE 
+    new_mode = request.json.get(
+        "mode",
+        ""
+    ).upper()
+
+    if new_mode in ("AP","CP"):
+        MODE = new_mode
+        return jsonify({"status": "ok", "node": NODE_NAME, "mode": MODE})
+    return jsonify({"error": "Mode must be CP or AP"}), 400
+
+
+#main namespace
+if __name__ == "__main__" :
+    port = int(os.environ.get("PORT", 5000))
+    app.run(
+        host='0.0.0.0',
+        port=port
+    )
+
+
+
